@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import os
 
 # TODO: change the colours of the plot
 
@@ -26,3 +27,15 @@ def plot_solution(solution, vertex, title, file_name):
     if file_name:
         plt.savefig(str(file_name) + ".png", format="PNG")
     plt.show()
+
+
+def setup_folders():
+    # Create the 'output' and 'gif' folders if they do not exist
+    try:
+        os.mkdir('output')
+    except OSError:
+        pass
+    try:
+        os.mkdir('output/git')
+    except OSError:
+        pass

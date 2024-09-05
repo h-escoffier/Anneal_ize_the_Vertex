@@ -1,4 +1,7 @@
+import os
+import re
 import numpy as np
+import imageio.v2 as io
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap
@@ -51,3 +54,16 @@ def plot_history(history_list, output_boolean):
         plt.savefig("output/history.png", format="PNG")
     else:
         plt.show()
+
+
+def gif_creation(path_gif='./output/gif', name_gif='./output/gif_simulated_annealing.gif'):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    images = list()
+    for file in sorted(os.listdir(path_gif), key=alphanum_key):
+        file_path = os.path.join(path_gif, file)
+        images.append(io.imread(file_path))
+    duration_time = [100]*(len(images) - 1)
+    duration_time.append(10000)
+    io.mimsave(name_gif, images, duration=duration_time, loop=0)
+

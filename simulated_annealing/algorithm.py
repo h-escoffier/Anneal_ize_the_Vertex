@@ -1,8 +1,10 @@
 import numpy as np
+from global_function import plot_solution
+from simulated_annealing.plot import gif_creation
 
 
 class SimulatedAnnealing:
-    def __init__(self, vertex, bf_solution, alpha=0.95, t0=50, max_move=100, max_fail=10, temp='geometric'):
+    def __init__(self, vertex, bf_solution, alpha=0.95, t0=50, max_move=100, max_fail=10, temp='geometric', gif=False):
         self.vertex = vertex
         self.alpha = alpha
         self.t0 = t0
@@ -13,6 +15,7 @@ class SimulatedAnnealing:
         self.best_solution = ()
         self.bf_solution = bf_solution
         self.history = []
+        self.gif = gif
 
     # Determines S0
     def f_s0(self):
@@ -88,10 +91,17 @@ class SimulatedAnnealing:
         all_time_best_energy = optimise_energy(self.vertex, self.solution)
         i = 0
         count = 0
+        # last_plot_solution = 0
         # Algorithm
         while self.max_fail != failure and t > 0:
             list_s_vi = self.switch(self.solution)
             s_, v_i = list_s_vi
+            # if self.gif and conversion(self.best_solution) != last_plot_solution:
+            if self.gif:
+                plot_solution(conversion(s_), self.vertex,
+                              'Simulated Annealing : Iteration ' + str(count),
+                              'output/gif/' + str(count))
+                # last_plot_solution = conversion(self.best_solution)
             delta = optimise_energy(self.vertex, s_) - optimise_energy(self.vertex, self.solution)
             if delta < 0:
                 self.solution = s_
@@ -108,6 +118,11 @@ class SimulatedAnnealing:
             self.history.append([count, t, optimise_energy(self.vertex, self.solution), all_time_best_energy])
             count += 1
         final_solution = conversion(self.best_solution)
+        if self.gif:
+            plot_solution(final_solution, self.vertex,
+                          'Simulated Annealing : Optimal Solution',
+                          'output/gif/' + str(count + 1))
+            gif_creation()
         return final_solution
 
     def run(self):

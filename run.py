@@ -4,13 +4,13 @@ from create_vertex.vertex import create_vertex
 from brute_force.brute_force import bruteforce_algorithm
 from simulated_annealing.algorithm import SimulatedAnnealing
 from simulated_annealing.plot import plot_history
-from global_function import plot_solution, verification
+from global_function import plot_solution, verification, setup_folders
 
 
 original_stdout = sys.stdout
 
 
-def main(nb_nodes, nb_edges, output_boolean):
+def main(nb_nodes, nb_edges, output_boolean=True):
     # Create the vertex
     vertex = create_vertex(nb_nodes, nb_edges)
     # Brute Force Algorithm
@@ -40,7 +40,7 @@ def main(nb_nodes, nb_edges, output_boolean):
             solutions.append(solution)
             no_change += 1
             pbar.update(1)
-    # Plot best_solution here
+    # Plot best_solution
     if output_boolean:
         plot_solution(best_solution, vertex, 'Simulated Annealing',
                       "output/Simulated_annealing_solution")
@@ -56,7 +56,7 @@ def main(nb_nodes, nb_edges, output_boolean):
 
 
 if __name__ == '__main__':
-
     print('start')
-    main(20, 40, True)  # 1. Nb vertex / 2. Nb edges
+    setup_folders()
+    main(20, 30)  # 1. Nb vertex / 2. Nb edges
     print('end')
